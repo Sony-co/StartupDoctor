@@ -49,7 +49,7 @@ README:
     -Be conservative when estimating success_probability.
     -Most startups should score between 30 and 70.
     -Reserve scores above 80 for startups with exceptionally strong evidence of product-market fit, traction, or defensible advantages.
-    -Only give scores out of 100
+    -Only give scores out of 100 even confidence
 
     Required JSON:
 
