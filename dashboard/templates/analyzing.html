@@ -1,0 +1,1966 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>StartupDoctor • AI Analysis Engine</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+
+    --bg:#000;
+    --panel:#050505;
+    --border:#222;
+    --white:#ffffff;
+    --grey:#8b8b8b;
+    --green:#00ff88;
+
+}
+
+html{
+
+scroll-behavior:smooth;
+
+}
+
+body{
+
+    background:var(--bg);
+    color:white;
+    font-family:'JetBrains Mono',monospace;
+    overflow-x:hidden;
+    min-height:100vh;
+    position:relative;
+
+}
+
+/* =================================================== */
+/* Animated Grid Background                            */
+/* =================================================== */
+
+body::before{
+
+content:"";
+
+position:fixed;
+
+top:-100px;
+left:-100px;
+
+width:200%;
+height:200%;
+
+background:
+
+linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+
+background-size:40px 40px;
+
+animation:gridMove 25s linear infinite;
+
+z-index:-3;
+
+}
+
+@keyframes gridMove{
+
+0%{
+
+transform:translate(0,0);
+
+}
+
+100%{
+
+transform:translate(-40px,-40px);
+
+}
+
+}
+
+/* =================================================== */
+/* Soft Glow                                           */
+/* =================================================== */
+
+body::after{
+
+content:"";
+
+position:fixed;
+
+left:50%;
+top:40%;
+
+width:700px;
+height:700px;
+
+background:radial-gradient(circle,
+rgba(255,255,255,.05),
+transparent 70%);
+
+transform:translate(-50%,-50%);
+
+filter:blur(60px);
+
+z-index:-2;
+
+animation:glowPulse 5s ease-in-out infinite;
+
+}
+
+@keyframes glowPulse{
+
+0%,100%{
+
+opacity:.35;
+
+}
+
+50%{
+
+opacity:.75;
+
+}
+
+}
+
+/* =================================================== */
+/* Scan Line                                           */
+/* =================================================== */
+
+.scan-line{
+
+position:fixed;
+
+left:0;
+
+width:100%;
+
+height:2px;
+
+background:white;
+
+box-shadow:
+
+0 0 15px white,
+0 0 40px rgba(255,255,255,.35);
+
+opacity:.35;
+
+pointer-events:none;
+
+animation:scan 4s linear infinite;
+
+z-index:999;
+
+}
+
+@keyframes scan{
+
+0%{
+
+top:-10px;
+
+}
+
+100%{
+
+top:100%;
+
+}
+
+}
+
+/* =================================================== */
+/* Floating Particles                                  */
+/* =================================================== */
+
+.particles{
+
+position:fixed;
+
+width:100%;
+height:100%;
+
+pointer-events:none;
+
+overflow:hidden;
+
+z-index:-1;
+
+}
+
+.particle{
+
+position:absolute;
+
+width:2px;
+height:2px;
+
+background:white;
+
+opacity:.25;
+
+border-radius:50%;
+
+animation:floatParticle linear infinite;
+
+}
+
+@keyframes floatParticle{
+
+0%{
+
+transform:translateY(100vh);
+
+opacity:0;
+
+}
+
+15%{
+
+opacity:.3;
+
+}
+
+90%{
+
+opacity:.15;
+
+}
+
+100%{
+
+transform:translateY(-120vh);
+
+opacity:0;
+
+}
+
+}
+
+/* =================================================== */
+/* Layout                                              */
+/* =================================================== */
+
+.container{
+
+width:min(1450px,92%);
+
+margin:auto;
+
+padding:40px 0;
+
+}
+
+.hero{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:35px;
+
+animation:heroEnter .9s ease;
+
+}
+
+@keyframes heroEnter{
+
+from{
+
+opacity:0;
+
+transform:translateY(-25px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:none;
+
+}
+
+}
+
+.logo{
+
+display:flex;
+
+align-items:center;
+
+gap:16px;
+
+}
+
+.logo img:first-child{
+
+width:88px;
+
+height:88px;
+
+animation:logoFloat 4s ease-in-out infinite;
+
+}
+
+@keyframes logoFloat{
+
+0%,100%{
+
+transform:translateY(0px);
+
+}
+
+50%{
+
+transform:translateY(-8px);
+
+}
+
+}
+
+.subtitle{
+
+margin-top:10px;
+
+color:var(--grey);
+
+letter-spacing:1px;
+
+}
+
+/* =================================================== */
+/* Status Card                                         */
+/* =================================================== */
+
+.status{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+padding:18px 24px;
+
+border:1px solid var(--border);
+
+background:#050505;
+
+transition:.35s;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.status::before{
+
+content:"";
+
+position:absolute;
+
+left:-100%;
+
+top:0;
+
+width:100%;
+height:100%;
+
+background:linear-gradient(
+
+90deg,
+
+transparent,
+
+rgba(255,255,255,.08),
+
+transparent
+
+);
+
+animation:statusSweep 2.5s linear infinite;
+
+}
+
+@keyframes statusSweep{
+
+100%{
+
+left:120%;
+
+}
+
+}
+
+.status img{
+
+width:22px;
+
+filter:invert(1);
+
+animation:pulseIcon 1.5s infinite;
+
+}
+
+@keyframes pulseIcon{
+
+0%,100%{
+
+transform:scale(1);
+
+}
+
+50%{
+
+transform:scale(1.18);
+
+}
+
+}
+
+.main{
+
+display:grid;
+
+grid-template-columns:1fr 390px;
+
+gap:28px;
+
+}
+
+/* =================================================== */
+/* Panels                                              */
+/* =================================================== */
+
+.panel{
+
+background:var(--panel);
+
+border:1px solid var(--border);
+
+padding:26px;
+
+position:relative;
+
+overflow:hidden;
+
+opacity:0;
+
+transform:translateY(35px);
+
+animation:panelEnter .8s forwards;
+
+}
+
+.panel:nth-child(1){
+
+animation-delay:.2s;
+
+}
+
+.panel:nth-child(2){
+
+animation-delay:.4s;
+
+}
+
+.panel:nth-child(3){
+
+animation-delay:.6s;
+
+}
+
+@keyframes panelEnter{
+
+to{
+
+opacity:1;
+
+transform:none;
+
+}
+
+}
+
+.panel:hover{
+
+border-color:#555;
+
+box-shadow:
+
+0 0 20px rgba(255,255,255,.06);
+
+}
+
+/* =================================================== */
+/* Progress Section                                    */
+/* =================================================== */
+
+.progress-title{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+font-family:'Orbitron',sans-serif;
+
+margin-bottom:18px;
+
+}
+
+.percent{
+
+font-size:34px;
+
+font-weight:700;
+
+text-shadow:
+
+0 0 15px rgba(255,255,255,.3);
+
+}
+
+.progress-bar{
+
+width:100%;
+
+height:22px;
+
+border:1px solid white;
+
+overflow:hidden;
+
+background:#050505;
+
+}
+
+.fill{
+
+width:0;
+
+height:100%;
+
+background:white;
+
+box-shadow:
+
+0 0 20px white,
+0 0 50px rgba(255,255,255,.35);
+
+transition:width .9s ease;
+
+position:relative;
+
+}
+
+.fill::after{
+
+content:"";
+
+position:absolute;
+
+top:0;
+right:0;
+
+width:70px;
+height:100%;
+
+background:linear-gradient(
+
+90deg,
+
+transparent,
+
+rgba(255,255,255,.7)
+
+);
+
+animation:barSweep 1.3s linear infinite;
+
+}
+
+@keyframes barSweep{
+
+0%{
+
+transform:translateX(-70px);
+
+}
+
+100%{
+
+transform:translateX(70px);
+
+}
+
+}/* =================================================== */
+/* LEFT / RIGHT COLUMNS                                */
+/* =================================================== */
+
+.left{
+
+display:flex;
+flex-direction:column;
+gap:28px;
+
+}
+
+.right{
+
+display:flex;
+flex-direction:column;
+gap:28px;
+
+}
+
+/* =================================================== */
+/* ACTIVE AGENTS                                       */
+/* =================================================== */
+
+.agent-grid{
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+
+}
+
+.agent{
+
+display:flex;
+align-items:center;
+gap:14px;
+
+padding:18px;
+
+border:1px solid var(--border);
+
+background:#070707;
+
+transition:.35s;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.agent::before{
+
+content:"";
+
+position:absolute;
+
+left:-120%;
+
+top:0;
+
+width:100%;
+height:100%;
+
+background:linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,.08),
+transparent
+);
+
+transition:.5s;
+
+}
+
+.agent:hover::before{
+
+left:120%;
+
+}
+
+.agent:hover{
+
+transform:translateY(-4px);
+
+border-color:#666;
+
+}
+
+.agent img{
+
+width:24px;
+height:24px;
+
+filter:invert(1);
+
+flex-shrink:0;
+
+}
+
+/* Pending */
+
+.pending{
+
+opacity:.35;
+
+filter:grayscale(100%);
+
+}
+
+/* Running */
+
+.running{
+
+border-color:white;
+
+box-shadow:
+0 0 18px rgba(255,255,255,.15);
+
+animation:agentPulse 1.6s infinite;
+
+}
+
+.running img{
+
+animation:rotateIcon 3s linear infinite;
+
+}
+
+/* Complete */
+
+.complete{
+
+border-color:#666;
+
+opacity:1;
+
+}
+
+.complete::after{
+
+content:"✓";
+
+position:absolute;
+
+right:18px;
+
+font-size:18px;
+
+font-weight:bold;
+
+color:var(--green);
+
+}
+
+@keyframes rotateIcon{
+
+from{
+
+transform:rotate(0deg);
+
+}
+
+to{
+
+transform:rotate(360deg);
+
+}
+
+}
+
+@keyframes agentPulse{
+
+0%{
+
+box-shadow:0 0 0 rgba(255,255,255,0);
+
+}
+
+50%{
+
+box-shadow:0 0 20px rgba(255,255,255,.35);
+
+}
+
+100%{
+
+box-shadow:0 0 0 rgba(255,255,255,0);
+
+}
+
+}
+
+/* =================================================== */
+/* TERMINAL                                            */
+/* =================================================== */
+
+.terminal{
+
+min-height:320px;
+
+position:relative;
+
+}
+
+.terminal-header{
+
+display:flex;
+
+align-items:center;
+
+gap:12px;
+
+margin-bottom:22px;
+
+font-family:'Orbitron',sans-serif;
+
+}
+
+.terminal-header img{
+
+width:22px;
+
+height:22px;
+
+filter:invert(1);
+
+display:block;
+
+}
+
+#steps{
+
+font-size:.95rem;
+
+line-height:1.9;
+
+color:var(--green);
+
+}
+
+#steps p{
+
+margin-bottom:10px;
+
+opacity:0;
+
+animation:terminalFade .5s forwards;
+
+}
+
+@keyframes terminalFade{
+
+to{
+
+opacity:1;
+
+}
+
+}
+
+/* blinking cursor */
+
+#steps::after{
+
+content:"▋";
+
+color:white;
+
+animation:blink .8s infinite;
+
+margin-left:4px;
+
+}
+
+@keyframes blink{
+
+50%{
+
+opacity:0;
+
+}
+
+}
+
+/* =================================================== */
+/* AI AVATAR                                           */
+/* =================================================== */
+
+.avatar-box{
+
+text-align:center;
+
+}
+
+.avatar-box img{
+
+width:220px;
+
+max-width:100%;
+
+animation:
+avatarFloat 5s ease-in-out infinite,
+avatarGlow 3s ease-in-out infinite;
+
+}
+
+@keyframes avatarFloat{
+
+0%,100%{
+
+transform:translateY(0px);
+
+}
+
+50%{
+
+transform:translateY(-10px);
+
+}
+
+}
+
+@keyframes avatarGlow{
+
+0%,100%{
+
+filter:
+drop-shadow(0 0 0px white);
+
+}
+
+50%{
+
+filter:
+drop-shadow(0 0 22px rgba(255,255,255,.45));
+
+}
+
+}
+
+.avatar-title{
+
+margin-top:20px;
+
+font-family:'Orbitron',sans-serif;
+
+letter-spacing:2px;
+
+}
+
+/* =================================================== */
+/* METRICS                                             */
+/* =================================================== */
+
+.metric{
+
+border:1px solid var(--border);
+
+padding:18px;
+
+margin-bottom:18px;
+
+transition:.35s;
+
+background:#070707;
+
+}
+
+.metric:hover{
+
+transform:translateY(-4px);
+
+border-color:white;
+
+box-shadow:
+
+0 0 18px rgba(255,255,255,.08);
+
+}
+
+.metric p{
+
+color:#999;
+
+margin:0;
+
+}
+
+.metric h3{
+
+margin-top:8px;
+
+font-family:'Orbitron',sans-serif;
+
+font-size:1.3rem;
+
+}
+
+/* =================================================== */
+/* FOOTER                                              */
+/* =================================================== */
+
+.footer{
+
+margin-top:40px;
+
+text-align:center;
+
+font-family:'Orbitron',sans-serif;
+
+color:#777;
+
+letter-spacing:2px;
+
+opacity:.7;
+
+animation:footerGlow 4s infinite;
+
+}
+
+@keyframes footerGlow{
+
+0%,100%{
+
+opacity:.5;
+
+}
+
+50%{
+
+opacity:1;
+
+}
+
+}
+
+/* =================================================== */
+/* RESPONSIVE                                          */
+/* =================================================== */
+
+@media(max-width:1050px){
+
+.main{
+
+grid-template-columns:1fr;
+
+}
+
+.hero{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:22px;
+
+}
+
+.agent-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.right{
+
+order:-1;
+
+}
+
+.logo img:first-child{
+
+width:70px;
+
+height:70px;
+
+}
+
+}
+
+@media(max-width:700px){
+
+.container{
+
+width:95%;
+
+}
+
+.progress-title{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:10px;
+
+}
+
+.percent{
+
+font-size:26px;
+
+}
+
+.avatar-box img{
+
+width:180px;
+
+}
+
+.panel{
+
+padding:18px;
+
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="scan-line"></div>
+
+<div class="particles" id="particles"></div>
+
+<div class="container">
+
+<!-- ========================================== -->
+<!-- HERO                                       -->
+<!-- ========================================== -->
+
+<div class="hero">
+
+    <div>
+
+        <div class="logo">
+
+            <img src="{% static 'assets/SDlogo.png' %}" alt="StartupDoctor">
+
+            <img src="{% static 'assets/log.png' %}" alt="StartupDoctor Logo">
+
+        </div>
+
+        <div class="subtitle">
+
+            Multi-Agent AI Startup Intelligence Platform
+
+        </div>
+
+    </div>
+
+    <div class="status">
+
+        <img src="{% static 'assets/activity.svg' %}" alt="status">
+
+        <span id="system-status">
+
+            SYSTEM ONLINE
+
+        </span>
+
+    </div>
+
+</div>
+
+<!-- ========================================== -->
+<!-- MAIN GRID                                  -->
+<!-- ========================================== -->
+
+<div class="main">
+
+<!-- ========================================== -->
+<!-- LEFT SIDE                                  -->
+<!-- ========================================== -->
+
+<div class="left">
+
+<!-- ========================================== -->
+<!-- PROGRESS                                   -->
+<!-- ========================================== -->
+
+<div class="panel">
+
+<div class="progress-title">
+
+<span>
+
+ANALYSIS IN PROGRESS
+
+</span>
+
+<span class="percent" id="percent">
+
+0%
+
+</span>
+
+</div>
+
+<div class="progress-bar">
+
+<div class="fill" id="fill"></div>
+
+</div>
+
+<div class="time" id="timeText">
+
+Initializing AI Agents...
+
+</div>
+
+</div>
+
+<!-- ========================================== -->
+<!-- AGENTS                                     -->
+<!-- ========================================== -->
+
+<div class="panel">
+
+<h2
+style="margin-bottom:22px;
+font-family:'Orbitron',sans-serif;">
+
+ACTIVE AI AGENTS
+
+</h2>
+
+<div class="agent-grid">
+
+<div
+class="agent running"
+id="agent1">
+
+<img
+src="{% static 'assets/brain.svg' %}"
+alt="">
+
+<div>
+
+<b>Understanding Agent</b>
+
+<br>
+
+<small>
+
+Reading Repository
+
+</small>
+
+</div>
+
+</div>
+
+<div
+class="agent pending"
+id="agent2">
+
+<img
+src="{% static 'assets/search.svg' %}"
+alt="">
+
+<div>
+
+<b>Evaluation Agent</b>
+
+<br>
+
+<small>
+
+Waiting...
+
+</small>
+
+</div>
+
+</div>
+
+<div
+class="agent pending"
+id="agent3">
+
+<img
+src="{% static 'assets/target.svg' %}"
+alt="">
+
+<div>
+
+<b>Roadmap Agent</b>
+
+<br>
+
+<small>
+
+Waiting...
+
+</small>
+
+</div>
+
+</div>
+
+<div
+class="agent pending"
+id="agent4">
+
+<img
+src="{% static 'assets/sparkles.svg' %}"
+alt="">
+
+<div>
+
+<b>Founder Report Agent</b>
+
+<br>
+
+<small>
+
+Waiting...
+
+</small>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ========================================== -->
+<!-- LIVE TERMINAL                              -->
+<!-- ========================================== -->
+
+<div class="panel terminal">
+
+<div class="terminal-header">
+
+<img
+src="{% static 'assets/cpu.svg' %}"
+alt="">
+
+<h2>
+
+LIVE ANALYSIS FEED
+
+</h2>
+
+</div>
+
+<div id="steps">
+
+<p>
+
+> Booting StartupDoctor Engine...
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ========================================== -->
+<!-- RIGHT SIDE                                 -->
+<!-- ========================================== -->
+
+<div class="right">
+
+<!-- ========================================== -->
+<!-- AVATAR                                     -->
+<!-- ========================================== -->
+
+<div class="panel avatar-box">
+
+<img
+id="mentor"
+
+src="{% static 'anime/mentor.png' %}"
+
+alt="mentor">
+
+<div class="avatar-title">
+
+STARTUPDOCTOR AI
+
+</div>
+
+<div
+style="
+margin-top:10px;
+color:#888;">
+
+Founder Intelligence Engine
+
+</div>
+
+</div>
+
+<!-- ========================================== -->
+<!-- METRICS                                    -->
+<!-- ========================================== -->
+
+<div class="panel">
+
+<div class="metric">
+
+<div class="terminal-header">
+
+<img
+src="{% static 'assets/bot.svg' %}"
+alt="">
+
+<p>
+
+ACTIVE AGENTS
+
+</p>
+
+</div>
+
+<h3 id="metricAgents">
+
+4
+
+</h3>
+
+</div>
+
+<div class="metric">
+
+<div class="terminal-header">
+
+<img
+src="{% static 'assets/blend.svg' %}"
+alt="">
+
+<p>
+
+MODE
+
+</p>
+
+</div>
+
+<h3>
+
+DEEP SCAN
+
+</h3>
+
+</div>
+
+<div class="metric">
+
+<div class="terminal-header">
+
+<img
+src="{% static 'assets/square-activity.svg' %}"
+alt="">
+
+<p>
+
+STATUS
+
+</p>
+
+</div>
+
+<h3 id="metricStatus">
+
+RUNNING
+
+</h3>
+
+</div>
+
+<div class="metric">
+
+<div class="terminal-header">
+
+<img
+src="{% static 'assets/loader-pinwheel.svg' %}"
+alt="">
+
+<p>
+
+DATA POINTS
+
+</p>
+
+</div>
+
+<h3 id="points">
+
+0
+
+</h3>
+
+</div>
+
+<div class="metric">
+
+<div class="terminal-header">
+
+<img
+src="{% static 'assets/database.svg' %}"
+alt="">
+
+<p>
+
+REPOSITORY
+
+</p>
+
+</div>
+
+<h3>
+
+CONNECTED
+
+</h3>
+
+</div>
+
+<div class="metric">
+
+<div class="terminal-header">
+
+<img
+src="{% static 'assets/shield-check.svg' %}"
+alt="">
+
+<p>
+
+LEMMA TRACE
+
+</p>
+
+</div>
+
+<h3 id="lemmaStatus">
+
+STREAMING
+
+</h3>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+/// TRUSTED BY FOUNDERS • POWERED BY AI • STARTUPDOCTOR ///
+
+</div>
+
+</div>
+
+<script>
+
+fetch("/run-analysis/");
+
+
+/* ===========================================
+   PARTICLE GENERATOR
+=========================================== */
+
+const particleContainer = document.getElementById("particles");
+
+for(let i=0;i<45;i++){
+
+    const p=document.createElement("div");
+
+    p.className="particle";
+
+    p.style.left=Math.random()*100+"%";
+
+    p.style.animationDuration=
+    (12+Math.random()*18)+"s";
+
+    p.style.animationDelay=
+    (Math.random()*10)+"s";
+
+    p.style.opacity=Math.random()*.4;
+
+    particleContainer.appendChild(p);
+
+}
+
+
+/* ===========================================
+   TERMINAL MESSAGES
+=========================================== */
+
+const terminalSteps=[
+
+"Repository detected...",
+"Reading README...",
+"Understanding startup idea...",
+"Detecting business model...",
+"Estimating market size...",
+"Finding competitors...",
+"Analyzing differentiation...",
+"Evaluating monetization...",
+"Generating roadmap...",
+"Founder report compiling...",
+"Preparing dashboard..."
+
+];
+
+let terminalIndex=0;
+
+const terminal=document.getElementById("steps");
+
+function typeTerminal(text){
+
+    const p=document.createElement("p");
+
+    terminal.appendChild(p);
+
+    let i=0;
+
+    const typing=setInterval(function(){
+
+        p.innerHTML="&gt; "+text.substring(0,i);
+
+        i++;
+
+        if(i>text.length){
+
+            clearInterval(typing);
+
+        }
+
+    },25);
+
+}
+
+
+/* ===========================================
+   PROGRESS
+=========================================== */
+
+let progress=0;
+
+const progressBar=document.getElementById("fill");
+
+const percent=document.getElementById("percent");
+
+const timeText=document.getElementById("timeText");
+
+const metricStatus=document.getElementById("metricStatus");
+
+const points=document.getElementById("points");
+
+const lemma=document.getElementById("lemmaStatus");
+
+
+const timeMessages=[
+
+"Connecting to GitHub...",
+"Fetching Repository...",
+"Understanding Startup...",
+"Evaluating Startup...",
+"Generating Roadmap...",
+"Preparing Founder Report..."
+
+];
+
+let msg=0;
+
+
+/* ===========================================
+   AGENTS
+=========================================== */
+
+const agents=[
+
+document.getElementById("agent1"),
+document.getElementById("agent2"),
+document.getElementById("agent3"),
+document.getElementById("agent4")
+
+];
+
+function activateAgent(index){
+
+    if(index>0){
+
+        agents[index-1].className="agent complete";
+
+        agents[index-1].querySelector("small").innerHTML="Completed";
+
+    }
+
+    if(index<agents.length){
+
+        agents[index].className="agent running";
+
+        agents[index].querySelector("small").innerHTML="Running";
+
+    }
+
+}
+
+activateAgent(0);
+
+
+/* ===========================================
+   DATA POINT COUNTER
+=========================================== */
+
+let dataPoints=0;
+
+const counter=setInterval(function(){
+
+    dataPoints+=Math.floor(Math.random()*15)+8;
+
+    points.innerHTML=dataPoints;
+
+    if(dataPoints>1600){
+
+        clearInterval(counter);
+
+    }
+
+},120);
+
+
+/* ===========================================
+   MAIN LOOP
+=========================================== */
+
+const loading=setInterval(function(){
+
+    progress+=Math.random()*1.0;
+
+    if(progress>100){
+
+        progress=100;
+
+    }
+
+    progressBar.style.width=progress+"%";
+
+    percent.innerHTML=Math.floor(progress)+"%";
+    /* ------------------------------
+       Update Status Messages
+    ------------------------------ */
+
+    if(progress>15 && msg===0){
+
+        timeText.innerHTML=timeMessages[0];
+
+        typeTerminal(terminalSteps[0]);
+
+        msg++;
+
+    }
+
+    if(progress>30 && msg===1){
+
+        timeText.innerHTML=timeMessages[1];
+
+        typeTerminal(terminalSteps[1]);
+
+        typeTerminal(terminalSteps[2]);
+
+        activateAgent(1);
+
+        msg++;
+
+    }
+
+    if(progress>50 && msg===2){
+
+        timeText.innerHTML=timeMessages[2];
+
+        typeTerminal(terminalSteps[3]);
+
+        typeTerminal(terminalSteps[4]);
+
+        activateAgent(2);
+
+        msg++;
+
+    }
+
+    if(progress>70 && msg===3){
+
+        timeText.innerHTML=timeMessages[3];
+
+        typeTerminal(terminalSteps[5]);
+
+        typeTerminal(terminalSteps[6]);
+
+        typeTerminal(terminalSteps[7]);
+
+        activateAgent(3);
+
+        msg++;
+
+    }
+
+    if(progress>88 && msg===4){
+
+        timeText.innerHTML=timeMessages[4];
+
+        typeTerminal(terminalSteps[8]);
+
+        lemma.innerHTML="PROCESSING";
+
+        msg++;
+
+    }
+
+    if(progress>=100){
+
+        clearInterval(loading);
+
+        metricStatus.innerHTML="FINALIZING";
+
+        lemma.innerHTML="SAVING TRACE";
+
+        typeTerminal(terminalSteps[9]);
+
+        typeTerminal(terminalSteps[10]);
+
+    }
+
+},350);
+
+
+/* ===========================================
+   LIVE STATUS CHECK
+=========================================== */
+
+const poll=setInterval(function(){
+
+    fetch("/analysis-status/")
+
+    .then(response=>response.json())
+
+    .then(data=>{
+
+        if(data.complete){
+
+            clearInterval(poll);
+
+            progressBar.style.width="100%";
+
+            percent.innerHTML="100%";
+
+            metricStatus.innerHTML="COMPLETE";
+
+            lemma.innerHTML="COMPLETE";
+
+            agents.forEach(function(agent){
+
+                agent.className="agent complete";
+
+                agent.querySelector("small").innerHTML="Completed";
+
+            });
+
+            typeTerminal("Analysis Complete.");
+
+            typeTerminal("Preparing Dashboard...");
+
+            setTimeout(function(){
+
+                window.location.href="/dashboard/";
+
+            },1800);
+
+        }
+
+    });
+
+},1000);
+
+
+/* ===========================================
+   FLOATING EFFECT
+=========================================== */
+
+document.addEventListener("mousemove",function(e){
+
+    const hero=document.querySelector(".hero");
+
+    const x=(e.clientX/window.innerWidth-.5)*8;
+
+    const y=(e.clientY/window.innerHeight-.5)*8;
+
+    hero.style.transform=
+    `translate(${x}px,${y}px)`;
+
+});
+
+
+/* ===========================================
+   STATUS BLINK
+=========================================== */
+
+setInterval(function(){
+
+    const status=document.getElementById("system-status");
+
+    status.style.opacity=".4";
+
+    setTimeout(function(){
+
+        status.style.opacity="1";
+
+    },200);
+
+},2000);
+
+
+/* ===========================================
+   PANEL FADE
+=========================================== */
+
+window.addEventListener("load",function(){
+
+    const panels=document.querySelectorAll(".panel");
+
+    panels.forEach(function(panel,index){
+
+        panel.style.animationDelay=(index*.12)+"s";
+
+    });
+
+});
+
+</script>
+
+</body>
+
+</html>

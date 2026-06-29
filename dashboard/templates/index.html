@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>StartupDoctor</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Orbitron, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #111111, #000000 70%);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* subtle scanline + noise vibe */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(255,255,255,0.03),
+                rgba(255,255,255,0.03) 1px,
+                transparent 1px,
+                transparent 4px
+            );
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        /* faint moving light */
+        body::after {
+            content: "";
+            position: fixed;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 40%);
+            animation: drift 10s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes drift {
+            from { transform: translate(0,0); }
+            to { transform: translate(3%,2%); }
+        }
+
+        /* NAVBAR */
+        .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px 60px;
+
+}
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-box {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ffffff, #666666);
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(255,255,255,0.15);
+        }
+
+        .status {
+            color: #ffffff;
+            opacity: 0.7;
+        }
+
+        /* HERO */
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 60px;
+            min-height: 70vh;
+        }
+
+        .hero-left {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* FORM */
+        form {
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid #333;
+            background: #0a0a0a;
+            color: white;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        input:focus {
+            border: 1px solid #fff;
+        }
+
+        button {
+            padding: 15px 25px;
+            border: 1px solid #444;
+            border-radius: 10px;
+            background: #fff;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255,255,255,0.25);
+        }
+
+        /* ORB (now monochrome cyber sphere) */
+        .hero-right {
+            position: relative;
+        }
+
+        .orb {
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #ffffff, #777777 40%, #000000 70%);
+            box-shadow:
+                0 0 40px rgba(255,255,255,0.08),
+                inset 0 0 60px rgba(255,255,255,0.05);
+            animation: float 4s ease-in-out infinite;
+            position: relative;
+        }
+
+        /* subtle rotating ring */
+        .orb::after {
+            content: "";
+            position: absolute;
+            inset: -20px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.08);
+            animation: spin 12s linear infinite;
+        }
+
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-18px); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            color: #666;
+            padding: 30px;
+        }
+
+        #logo {
+    length : 90px;
+    height : 90px;
+    padding:10px;
+    }
+        /* ===== GLOBAL HOVER GLOW SYSTEM ===== */
+
+.glow-hover {
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+/* subtle lift */
+.glow-hover:hover {
+    transform: translateY(-2px);
+}
+
+/* glow effect layer */
+.glow-hover::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: radial-gradient(circle at var(--x, 50%) var(--y, 50%),
+        rgba(255,255,255,0.25),
+        transparent 60%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+}
+
+.glow-hover:hover::before {
+    opacity: 1;
+}
+
+/* ===== ORB CONTAINER ===== */
+.orb {
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #ffffff, #777777 40%, #000000 70%);
+    box-shadow:
+        0 0 40px rgba(255,255,255,0.08),
+        inset 0 0 60px rgba(255,255,255,0.05);
+    animation: float 4s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ===== PARTICLE LAYER ===== */
+.particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+/* individual particles */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.6;
+    box-shadow: 0 0 10px rgba(255,255,255,0.8);
+    animation: drift 6s linear infinite;
+}
+
+@keyframes drift {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(var(--dx), var(--dy)) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.blink {
+    color: #ffffff;
+    animation: blinkAnim 1s infinite;
+}
+
+@keyframes blinkAnim {
+    0% { opacity: 1; }
+    50% { opacity: 0.2; }
+    100% { opacity: 1; }
+}
+
+/* optional: make the dot also pulse */
+.status::before {
+    content: "● ";
+    color: white;
+    animation: blinkAnim 1s infinite;
+}
+
+.dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    margin-right: 6px;
+    animation: blinkAnim 1s infinite;
+}
+
+.terminal {
+    width: 600px;
+    height: 350px;
+    background: rgb(8,8,10);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 15px;
+    font-family: monospace;
+    color: #e5e5e5;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(255,255,255,0.05);
+}
+
+#terminal-output {
+    height: 280px;
+    overflow-y: auto;
+    padding-right: 5px;
+    font-size: 13px;
+}
+
+.line {
+    margin: 3px 0;
+    opacity: 0.9;
+}
+
+.input-line {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 8px;
+}
+
+.prompt {
+    color: #aaa;
+    margin-right: 8px;
+}
+
+#terminal-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    outline: none;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+.cursor {
+    display: inline-block;
+    width: 8px;
+    background: white;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+        /* responsive */
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            form {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<script>
+document.querySelectorAll(".glow-hover").forEach(el => {
+    el.addEventListener("mousemove", (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+        el.style.setProperty("--x", `${x}%`);
+        el.style.setProperty("--y", `${y}%`);
+    });
+});
+
+
+    const particleContainer = document.querySelector(".particles");
+
+function createParticle() {
+    const p = document.createElement("div");
+    p.classList.add("particle");
+
+    // random angle + distance
+    const angle = Math.random() * 2 * Math.PI;
+    const distance = 60 + Math.random() * 80;
+
+    const dx = Math.cos(angle) * distance + "px";
+    const dy = Math.sin(angle) * distance + "px";
+
+    p.style.setProperty("--dx", dx);
+    p.style.setProperty("--dy", dy);
+
+    // random start position inside orb
+    p.style.left = Math.random() * 100 + "%";
+    p.style.top = Math.random() * 100 + "%";
+
+    particleContainer.appendChild(p);
+
+    // remove after animation
+    setTimeout(() => {
+        p.remove();
+    }, 6000);
+}
+
+// continuous spawn
+setInterval(() => {
+    for (let i = 0; i < 2; i++) createParticle();
+}, 200);
+
+    <script>
+const output = document.getElementById("terminal-output");
+const input = document.getElementById("terminal-input");
+
+function addLine(text) {
+    const div = document.createElement("div");
+    div.className = "line";
+    div.textContent = text;
+    output.appendChild(div);
+    output.scrollTop = output.scrollHeight;
+}
+
+function typeLine(text, speed = 20) {
+    let i = 0;
+    const div = document.createElement("div");
+    div.className = "line";
+    output.appendChild(div);
+
+    const interval = setInterval(() => {
+        div.textContent += text[i];
+        i++;
+        if (i >= text.length) clearInterval(interval);
+        output.scrollTop = output.scrollHeight;
+    }, speed);
+}
+
+// fake AI boot sequence
+window.onload = () => {
+    typeLine("Booting StartupDoctor AI...");
+    setTimeout(() => typeLine("Loading agent: understanding-agent ✔"), 800);
+    setTimeout(() => typeLine("Loading agent: evaluation-agent ✔"), 1400);
+    setTimeout(() => typeLine("System status: ONLINE"), 2000);
+    setTimeout(() => addLine(""), 2200);
+};
+
+// command system
+input.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+        const cmd = input.value;
+        addLine("user@startupdoctor:~$ " + cmd);
+
+        handleCommand(cmd);
+        input.value = "";
+    }
+});
+
+function handleCommand(cmd) {
+    cmd = cmd.toLowerCase();
+
+    if (cmd === "help") {
+        addLine("commands: help, status, clear, run");
+    }
+    else if (cmd === "status") {
+        addLine("SYSTEM: ONLINE | AI AGENTS: ACTIVE | LATENCY: 12ms");
+    }
+    else if (cmd === "clear") {
+        output.innerHTML = "";
+    }
+    else if (cmd === "run") {
+        typeLine("Running multi-agent analysis...");
+        setTimeout(() => typeLine("LangChain detected → evaluating startup potential..."), 800);
+    }
+    else {
+        addLine("Unknown command. Type 'help'");
+    }
+}
+</script>
+
+<body>
+
+<div class="navbar">
+    <div class="logo">
+        <div><img id="logo" src="{% static 'assets/SDlogo.png' %}" alt="StartupDoctor"></div>
+        <div>
+            <h1 style="font-size:60px;">STARTUP DOCTOR</h1>
+        </div>
+    </div>
+
+    <div class="status">
+    <span class="dot"></span> SYSTEM <span class="blink">ONLINE</span>
+</div>
+</div>
+
+<div class="hero">
+    <div class="hero-left">
+        <h1 class="glow-hover">Analyze Any Startup Instantly</h1>
+
+        <p class="glow-hover">
+            Deep AI evaluation of market potential, risks, competition and execution strength.
+        </p>
+
+        <form method="POST" action="/analyzing/">
+            {% csrf_token %}
+            <input class="glow-hover" type="text" name="github_url" placeholder="Paste GitHub repo URL">
+            <button class="glow-hover" type="submit">Run Analysis →</button>
+        </form>
+    </div>
+
+    <div class="hero-right">
+    <div class="orb glow-hover" id="orb">
+        <div class="particles"></div>
+    </div>
+</div>
+</div>
+
+<div class="footer">
+    /// Trusted by Founders , Driven By AI ///
+</div>
+
+</body>
+</html>

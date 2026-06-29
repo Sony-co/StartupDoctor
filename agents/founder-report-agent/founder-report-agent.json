@@ -1,0 +1,11 @@
+{
+  "name": "founder-report-agent",
+  "description": "Creates an investor-style founder report summarizing the startup idea, evaluation insights, and execution roadmap. Combines all previous outputs into a clear, pitch-ready structured report for presentation or funding review.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": ["POD","WEB_SEARCH"],
+  "visibility": "POD",
+  "permissions": { "grants": [
+
+
+  ] }
+}

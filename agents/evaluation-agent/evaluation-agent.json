@@ -1,0 +1,9 @@
+{
+  "name": "evaluation-agent",
+  "description": "Evaluates the startup idea derived from a GitHub repository. Assesses feasibility, clarity of problem-solution fit, technical complexity, market potential, and overall startup viability. Produces structured analytical scoring and insights.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": ["POD","WEB_SEARCH"],
+  "visibility": "POD",
+  "permissions": { "grants": [] }
+}
+

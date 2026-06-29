@@ -1,0 +1,10 @@
+{
+  "name": "roadmap-agent",
+  "description": "Generates a step-by-step product and business roadmap based on startup analysis. Breaks down the idea into execution phases including MVP building, feature prioritization, scaling strategy, and technical milestones.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": ["POD","WEB_SEARCH"],
+  "visibility": "POD",
+  "permissions": { "grants": [
+
+  ] }
+}

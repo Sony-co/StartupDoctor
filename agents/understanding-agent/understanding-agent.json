@@ -1,0 +1,9 @@
+{
+  "name": "understanding-agent",
+  "description": " Analyzes GitHub repositories and extracts structured startup intelligence from code, README, and metadata.",
+  "instruction": { "$file": "instruction.md" },
+  "toolsets": ["POD","WEB_SEARCH"],
+  "visibility": "POD",
+  "permissions": { "grants": [
+  ] }
+}
