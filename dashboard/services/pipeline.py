@@ -25,4 +25,3 @@ def startup_doctor(url):
     print("get_ai_review:", round(time.time() - t, 2))
 
     return output
-
