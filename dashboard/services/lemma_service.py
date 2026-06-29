@@ -1,18 +1,12 @@
 
-import subprocess
+import requests
 
-def run_lemma_agent(agent, message):
-    result = subprocess.run(
-        ["lemma", "agent", "run", agent, message],
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-        timeout=180
+def call_lemma(payload):
+    r = requests.post(
+        "https://api.lemma.work/run",  # example
+        json=payload,
+        headers={"Authorization": f"Bearer {os.getenv('LEMMA_API_KEY')}"}
     )
-
-    if result.returncode != 0:
-        raise Exception(result.stderr)
-
-    return result.stdout.strip()
+    return r.json()
 
 #$env:PATH = "C:\Users\Admin\.local\bin;$env:PATH"
