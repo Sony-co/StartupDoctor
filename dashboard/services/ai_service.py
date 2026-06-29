@@ -1,6 +1,5 @@
 from groq import Groq
 from .prompts import evaluate_prompt,roadmap_prompt,founder_report_prompt
-from .lemma_service import run_lemma_agent
 import json
 import time
 import re
