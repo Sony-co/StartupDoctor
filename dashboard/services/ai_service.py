@@ -6,7 +6,7 @@ import time
 import re
 import os
 
-client = Groq(os.getenv("GROQ_API_KEY"))
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 
 #Full Generic Ai Function that returns the output of all the agents
