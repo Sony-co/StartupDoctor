@@ -20,6 +20,7 @@ def get_ai_review(prompt):
     )
 
     content = founder.choices[0].message.content
+    print (content)
     return json.loads(content)
 
 
