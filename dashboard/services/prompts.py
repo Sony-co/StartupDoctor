@@ -29,24 +29,66 @@ URL: {url}
 README:
 {readme}
 
----
 
-Return ONLY valid JSON.
+    Create a concise final report.
 
-{{
-  "startup_name": "",
-  "one_line_summary": "",
-  "problem": "",
-  "target_users": "",
-  "solution": "",
-  "key_features": [],
-  "business_model": "",
-  "industry": "",
-  "development_stage": "",
-  "unique_value_proposition": "",
-  "unique_advantage": "",
-  "confidence": 0
-}}
+    Focus on:
+    - Final decision
+    - Biggest strength
+    - Biggest weakness
+    - Biggest risk
+    - Biggest opportunity
+    - Most important next action
+    - Choose final decision only from AVOID,BUILD and WATCH
+
+    Return ONLY valid JSON.
+
+    Rules:
+    -Do not recalculate startup_score.
+    -Use the startup_score produced by the Evaluation Agent.
+    -Be conservative when estimating success_probability.
+    -Most startups should score between 30 and 70.
+    -Reserve scores above 80 for startups with exceptionally strong evidence of product-market fit, traction, or defensible advantages.
+    -Only give scores out of 100
+
+    Required JSON:
+
+    {{
+        "final_decision":"",
+        "confidence":0,
+        "success_probability":0,
+        "score_breakdown": {{
+        "market_size": 0,
+        "problem_severity": 0,
+        "competition": 0,
+        "monetization": 0,
+        "execution_feasibility": 0,
+        "moat": 0
+    }}
+        "startup_score":0,
+
+        "one_line_verdict":"",
+
+        "startup_name":"",
+        "startup_summary":"",
+
+        "top_strength":"",
+        "top_weakness":"",
+        "top_risk":"",
+        "top_opportunity":"",
+        "why_now":""
+        "ideal_customer":""
+        "competitive_edge":""
+        "red_flags": []
+        "biggest_unknown": ""
+        "startup_type": ""
+
+        "priority":"",
+        "immediate_next_action":"",
+
+        "founder_message":"",
+
+        "investor_view":"",
 """
     return prompt
 
